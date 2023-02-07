@@ -99,6 +99,7 @@ parser.add_argument(
     default="torch",
     help="The DL framework specifier.",
 )
+parser.add_argument("--gpus", type=int, default=1, help="How many GPUs should be used.")
 
 if __name__ == "__main__":
     ray.init()
