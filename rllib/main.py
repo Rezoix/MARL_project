@@ -146,7 +146,7 @@ if __name__ == "__main__":
         )
         .multi_agent(policies=policies, policy_mapping_fn=policy_mapping_fn)
         # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
-        .resources(num_gpus=1)
+        .resources(num_gpus=args.gpus)
     )
 
     # Switch on Curiosity based exploration for Pyramids env
