@@ -31,6 +31,8 @@ public class SoccerEnvController : MonoBehaviour
     /// We will be changing the ground material based on success/failue
     /// </summary>
 
+    float w_goal = 500f;
+
     public GameObject ball;
     [HideInInspector]
     public Rigidbody ballRb;
@@ -100,15 +102,15 @@ public class SoccerEnvController : MonoBehaviour
     {
         if (scoredTeam == Team.Blue)
         {
-            //m_BlueAgentGroup.AddGroupReward(1 - (float)m_ResetTimer / MaxEnvironmentSteps);
-            m_BlueAgentGroup.AddGroupReward(10);
-            m_PurpleAgentGroup.AddGroupReward(-10);
+            m_BlueAgentGroup.AddGroupReward((1 - (float)m_ResetTimer / MaxEnvironmentSteps) * w_goal);
+            //m_BlueAgentGroup.AddGroupReward(100);
+            m_PurpleAgentGroup.AddGroupReward(-w_goal);
         }
         else
         {
-            //m_PurpleAgentGroup.AddGroupReward(1 - (float)m_ResetTimer / MaxEnvironmentSteps);
-            m_PurpleAgentGroup.AddGroupReward(10);
-            m_BlueAgentGroup.AddGroupReward(-10);
+            m_PurpleAgentGroup.AddGroupReward((1 - (float)m_ResetTimer / MaxEnvironmentSteps) * w_goal);
+            //m_PurpleAgentGroup.AddGroupReward(100);
+            m_BlueAgentGroup.AddGroupReward(-w_goal);
         }
         m_PurpleAgentGroup.EndGroupEpisode();
         m_BlueAgentGroup.EndGroupEpisode();
@@ -124,7 +126,7 @@ public class SoccerEnvController : MonoBehaviour
         //Reset Agents
         foreach (var item in AgentsList)
         {
-            var randomPosX = Random.Range(-5f, 5f);
+            var randomPosX = Random.Range(-15f, 15f);
             var newStartPos = item.Agent.initialPos + new Vector3(randomPosX, 0f, 0f);
             var rot = item.Agent.rotSign * Random.Range(80.0f, 100.0f);
             var newRot = Quaternion.Euler(0, rot, 0);
