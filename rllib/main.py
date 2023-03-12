@@ -32,26 +32,8 @@ from ray.rllib.utils.test_utils import check_learning_achieved
 from env import Env
 
 parser = argparse.ArgumentParser()
-parser.add_argument(
-    "--env",
-    type=str,
-    default="SoccerTwos",
-    choices=[
-        "3DBall",
-        "3DBallHard",
-        "GridFoodCollector",
-        "Pyramids",
-        "SoccerStrikersVsGoalie",
-        "SoccerTwos",
-        "Sorter",
-        "Tennis",
-        "VisualHallway",
-        "Walker",
-    ],
-    help="The name of the Env to run in the Unity3D editor: `3DBall(Hard)?|"
-    "Pyramids|GridFoodCollector|SoccerStrikersVsGoalie|Sorter|Tennis|"
-    "VisualHallway|Walker` (feel free to add more and PR!)",
-)
+
+parser.add_argument("--restore", type=str, default=None)
 parser.add_argument(
     "--file-name",
     type=str,
@@ -93,12 +75,6 @@ parser.add_argument(
     help="The max. number of `step()`s for any episode (per agent) before "
     "it'll be reset again automatically.",
 )
-parser.add_argument(
-    "--framework",
-    choices=["tf", "tf2", "torch"],
-    default="torch",
-    help="The DL framework specifier.",
-)
 parser.add_argument("--gpus", type=int, default=1, help="How many GPUs should be used.")
 
 if __name__ == "__main__":
@@ -110,14 +86,12 @@ if __name__ == "__main__":
         "unity3d",
         lambda c: Env(
             file_name=c["file_name"],
-            no_graphics=(args.env != "VisualHallway" and c["file_name"] is not None),
+            no_graphics=(c["file_name"] is not None),
             episode_horizon=c["episode_horizon"],
         ),
     )
 
-    # Get policies (different agent types; "behaviors" in MLAgents) and
-    # the mappings from individual agents to Policies.
-    policies, policy_mapping_fn = Env.get_policy_configs_for_game(args.env)
+    policies, policy_mapping_fn = Env.get_policy_configs_for_game()
 
     config = (
         PPOConfig()
@@ -135,49 +109,18 @@ if __name__ == "__main__":
             rollout_fragment_length=200,
         )
         .training(
-            lr=0.0003,
+            lr=0.001,  # 0.0003,
             lambda_=0.95,
             gamma=0.99,
             sgd_minibatch_size=256,
             train_batch_size=4000,
             num_sgd_iter=20,
             clip_param=0.2,
-            model={"fcnet_hiddens": [512, 512]},
+            model={"fcnet_hiddens": [80, 80]},
         )
         .multi_agent(policies=policies, policy_mapping_fn=policy_mapping_fn)
-        # Use GPUs iff `RLLIB_NUM_GPUS` env var set to > 0.
         .resources(num_gpus=args.gpus)
     )
-
-    # Switch on Curiosity based exploration for Pyramids env
-    # (not solvable otherwise).
-    if args.env == "Pyramids":
-        config.exploration(
-            exploration_config={
-                "type": "Curiosity",
-                "eta": 0.1,
-                "lr": 0.001,
-                # No actual feature net: map directly from observations to feature
-                # vector (linearly).
-                "feature_net_config": {
-                    "fcnet_hiddens": [],
-                    "fcnet_activation": "relu",
-                },
-                "sub_exploration": {
-                    "type": "StochasticSampling",
-                },
-                "forward_net_activation": "relu",
-                "inverse_net_activation": "relu",
-            }
-        )
-    elif args.env == "GridFoodCollector":
-        config.training(
-            model={
-                "conv_filters": [[16, [4, 4], 2], [32, [4, 4], 2], [256, [10, 10], 1]],
-            }
-        )
-    elif args.env == "Sorter":
-        config.training(model={"use_attention": True})
 
     stop = {
         "training_iteration": args.stop_iters,
@@ -185,19 +128,24 @@ if __name__ == "__main__":
         "episode_reward_mean": args.stop_reward,
     }
 
-    # Run the experiment.
-    results = tune.Tuner(
-        "PPO",
-        param_space=config.to_dict(),
-        run_config=air.RunConfig(
-            stop=stop,
-            verbose=1,
-            checkpoint_config=air.CheckpointConfig(
-                checkpoint_frequency=5,
-                checkpoint_at_end=True,
+    if args.restore:
+        tuner = tune.Tuner.restore(args.restore)
+    else:
+        tuner = tune.Tuner(
+            "PPO",
+            param_space=config.to_dict(),
+            run_config=air.RunConfig(
+                stop=stop,
+                verbose=3,
+                checkpoint_config=air.CheckpointConfig(
+                    checkpoint_frequency=5,
+                    checkpoint_at_end=True,
+                ),
             ),
-        ),
-    ).fit()
+        )
+
+    # Run the experiment.
+    results = tuner.fit()
 
     # And check the results.
     if args.as_test:
