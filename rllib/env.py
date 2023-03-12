@@ -241,140 +241,35 @@ class Env(MultiAgentEnv):
         return obs, rewards, {"__all__": False}, infos
 
     @staticmethod
-    def get_policy_configs_for_game(
-        game_name: str,
-    ) -> Tuple[dict, Callable[[AgentID], PolicyID]]:
+    def get_policy_configs_for_game() -> Tuple[dict, Callable[[AgentID], PolicyID]]:
 
         # The RLlib server must know about the Spaces that the Client will be
         # using inside Unity3D, up-front.
-        obs_spaces = {
-            # 3DBall.
-            "3DBall": Box(float("-inf"), float("inf"), (8,)),
-            # 3DBallHard.
-            "3DBallHard": Box(float("-inf"), float("inf"), (45,)),
-            # GridFoodCollector
-            "GridFoodCollector": Box(float("-inf"), float("inf"), (40, 40, 6)),
-            # Pyramids.
-            "Pyramids": TupleSpace(
-                [
-                    Box(float("-inf"), float("inf"), (56,)),
-                    Box(float("-inf"), float("inf"), (56,)),
-                    Box(float("-inf"), float("inf"), (56,)),
-                    Box(float("-inf"), float("inf"), (4,)),
-                ]
-            ),
-            # SoccerTwos.
-            "SoccerPlayer": TupleSpace(
-                [
-                    Box(-1.0, 1.0, (264,)),
-                    Box(-1.0, 1.0, (72,)),
-                    Box(float("-inf"), float("inf"), (12,)),
-                ]
-            ),
-            # SoccerStrikersVsGoalie.
-            "Goalie": Box(float("-inf"), float("inf"), (738,)),
-            "Striker": TupleSpace(
-                [
-                    Box(float("-inf"), float("inf"), (231,)),
-                    Box(float("-inf"), float("inf"), (63,)),
-                ]
-            ),
-            # Sorter.
-            "Sorter": TupleSpace(
-                [
-                    Box(
-                        float("-inf"),
-                        float("inf"),
-                        (
-                            20,
-                            23,
-                        ),
-                    ),
-                    Box(float("-inf"), float("inf"), (10,)),
-                    Box(float("-inf"), float("inf"), (8,)),
-                ]
-            ),
-            # Tennis.
-            "Tennis": Box(float("-inf"), float("inf"), (27,)),
-            # VisualHallway.
-            "VisualHallway": Box(float("-inf"), float("inf"), (84, 84, 3)),
-            # Walker.
-            "Walker": Box(float("-inf"), float("inf"), (212,)),
-            # FoodCollector.
-            "FoodCollector": TupleSpace(
-                [
-                    Box(float("-inf"), float("inf"), (49,)),
-                    Box(float("-inf"), float("inf"), (4,)),
-                ]
-            ),
-        }
-        action_spaces = {
-            # 3DBall.
-            "3DBall": Box(-1.0, 1.0, (2,), dtype=np.float32),
-            # 3DBallHard.
-            "3DBallHard": Box(-1.0, 1.0, (2,), dtype=np.float32),
-            # GridFoodCollector.
-            "GridFoodCollector": MultiDiscrete([3, 3, 3, 2]),
-            # Pyramids.
-            "Pyramids": MultiDiscrete([5]),
-            # SoccerStrikersVsGoalie.
-            "Goalie": MultiDiscrete([3, 3, 3]),
-            "Striker": MultiDiscrete([3, 3, 3]),
-            # SoccerTwos.
-            "SoccerPlayer": Box(-1.0, 1.0, (2,), dtype=np.float32),
-            # "SoccerPlayer": MultiDiscrete([3, 3]),
-            # Sorter.
-            "Sorter": MultiDiscrete([3, 3, 3]),
-            # Tennis.
-            "Tennis": Box(-1.0, 1.0, (3,)),
-            # VisualHallway.
-            "VisualHallway": MultiDiscrete([5]),
-            # Walker.
-            "Walker": Box(-1.0, 1.0, (39,)),
-            # FoodCollector.
-            "FoodCollector": MultiDiscrete([3, 3, 3, 2]),
-        }
+        obs_spaces = Box(float("-inf"), float("inf"), (13,))
+
+        """ [
+                Box(-1.0, 1.0, (264,)),
+                Box(-1.0, 1.0, (72,)),
+                Box(float("-inf"), float("inf"), (13,)),
+            ] """
+
+        action_spaces = Box(-1.0, 1.0, (2,), dtype=np.float32)
+
+        # MultiDiscrete([3, 3]),
 
         # Policies (Unity: "behaviors") and agent-to-policy mapping fns.
-        if game_name == "SoccerStrikersVsGoalie":
-            policies = {
-                "Goalie": PolicySpec(
-                    observation_space=obs_spaces["Goalie"],
-                    action_space=action_spaces["Goalie"],
-                ),
-                "Striker": PolicySpec(
-                    observation_space=obs_spaces["Striker"],
-                    action_space=action_spaces["Striker"],
-                ),
-            }
+        policies = {
+            "PurplePlayer": PolicySpec(
+                observation_space=obs_spaces,
+                action_space=action_spaces,
+            ),
+            "BluePlayer": PolicySpec(
+                observation_space=obs_spaces,
+                action_space=action_spaces,
+            ),
+        }
 
-            def policy_mapping_fn(agent_id, episode, worker, **kwargs):
-                return "Striker" if "Striker" in agent_id else "Goalie"
-
-        elif game_name == "SoccerTwos":
-            policies = {
-                "PurplePlayer": PolicySpec(
-                    observation_space=obs_spaces["SoccerPlayer"],
-                    action_space=action_spaces["SoccerPlayer"],
-                ),
-                "BluePlayer": PolicySpec(
-                    observation_space=obs_spaces["SoccerPlayer"],
-                    action_space=action_spaces["SoccerPlayer"],
-                ),
-            }
-
-            def policy_mapping_fn(agent_id, episode, worker, **kwargs):
-                return "BluePlayer" if "1_" in agent_id else "PurplePlayer"
-
-        else:
-            policies = {
-                game_name: PolicySpec(
-                    observation_space=obs_spaces[game_name],
-                    action_space=action_spaces[game_name],
-                ),
-            }
-
-            def policy_mapping_fn(agent_id, episode, worker, **kwargs):
-                return game_name
+        def policy_mapping_fn(agent_id, episode, worker, **kwargs):
+            return "BluePlayer" if "0_" in agent_id else "PurplePlayer"
 
         return policies, policy_mapping_fn
