@@ -81,10 +81,7 @@ if __name__ == "__main__":
 
     trainer = PPOTrainer(config=config)
     trainer.restore(args.path)
-    print("\n\n\n\n\n\n\n\n\n\n------------------------------")
-    print(trainer.get_policy("PurplePlayer"))
-    print("------------------------------\n\n\n\n\n\n\n\n\n\n")
-    trainer.get_policy("PurplePlayer").export_model("./models", onnx=12)
+    trainer.get_policy("BluePlayer").export_model("./models", onnx=12)
 
     torchmodel = onnx.load("./models/model.onnx")  # the rllib output model dir
 
