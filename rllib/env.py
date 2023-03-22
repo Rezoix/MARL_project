@@ -245,7 +245,7 @@ class Env(MultiAgentEnv):
 
         # The RLlib server must know about the Spaces that the Client will be
         # using inside Unity3D, up-front.
-        obs_spaces = Box(float("-inf"), float("inf"), (13,))
+        obs_spaces = Box(-1.0, 1.0, (13,))
 
         """ [
                 Box(-1.0, 1.0, (264,)),
@@ -259,17 +259,13 @@ class Env(MultiAgentEnv):
 
         # Policies (Unity: "behaviors") and agent-to-policy mapping fns.
         policies = {
-            "PurplePlayer": PolicySpec(
+            "Player": PolicySpec(
                 observation_space=obs_spaces,
                 action_space=action_spaces,
-            ),
-            "BluePlayer": PolicySpec(
-                observation_space=obs_spaces,
-                action_space=action_spaces,
-            ),
+            )
         }
 
         def policy_mapping_fn(agent_id, episode, worker, **kwargs):
-            return "BluePlayer" if "0_" in agent_id else "PurplePlayer"
+            return "Player"
 
         return policies, policy_mapping_fn

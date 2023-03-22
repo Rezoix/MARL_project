@@ -30,9 +30,11 @@ from ray.rllib.algorithms.ppo import PPOConfig
 from ray.rllib.utils.test_utils import check_learning_achieved
 
 from env import Env
+from export import SaveCheckpointCallback
 
 parser = argparse.ArgumentParser()
 
+parser.add_argument("--model-path", type=str, default=".\\models\\")
 parser.add_argument("--restore", type=str, default=None)
 parser.add_argument(
     "--file-name",
@@ -109,11 +111,14 @@ if __name__ == "__main__":
             rollout_fragment_length=200,
         )
         .training(
-            lr=0.001,  # 0.0003,
+            lr=0.0003,
             lambda_=0.95,
             gamma=0.99,
             sgd_minibatch_size=256,
-            train_batch_size=4000,
+            train_batch_size=(args.horizon + 1) * args.num_workers
+            if args.file_name
+            else (args.horizon + 1),
+            # (args.horizon + 1)* 16* args.num_workers,
             num_sgd_iter=20,
             clip_param=0.2,
             model={"fcnet_hiddens": [80, 80]},
@@ -141,6 +146,7 @@ if __name__ == "__main__":
                     checkpoint_frequency=5,
                     checkpoint_at_end=True,
                 ),
+                callbacks=[SaveCheckpointCallback("Player", args.model_path)],
             ),
         )
 

@@ -211,21 +211,6 @@ PrefabInstance:
       propertyPath: printDebug
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8433358674387960385, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_Drag
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0.75
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3d9881c8181f444825487ea8f33857, type: 3}
 --- !u!1001 &58510999
@@ -314,21 +299,6 @@ PrefabInstance:
         type: 3}
       propertyPath: printDebug
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8433358674387960385, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_Drag
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3d9881c8181f444825487ea8f33857, type: 3}
@@ -624,21 +594,6 @@ PrefabInstance:
       propertyPath: printDebug
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8433358674387960385, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_Drag
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0.75
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3d9881c8181f444825487ea8f33857, type: 3}
 --- !u!1001 &1348885204
@@ -773,21 +728,6 @@ PrefabInstance:
       propertyPath: printDebug
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8433358674387960385, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_Drag
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0.75
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3d9881c8181f444825487ea8f33857, type: 3}
 --- !u!1001 &1465164946
@@ -876,21 +816,6 @@ PrefabInstance:
         type: 3}
       propertyPath: printDebug
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8433358674387960385, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_Drag
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3d9881c8181f444825487ea8f33857, type: 3}
@@ -1048,20 +973,15 @@ PrefabInstance:
       propertyPath: printDebug
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8433358674387960385, guid: 8e3d9881c8181f444825487ea8f33857,
+    - target: {fileID: 8909134750031973205, guid: 8e3d9881c8181f444825487ea8f33857,
         type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
+      propertyPath: m_Model
+      value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
+    - target: {fileID: 8955948990631787653, guid: 8e3d9881c8181f444825487ea8f33857,
         type: 3}
-      propertyPath: m_Drag
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0.75
+      propertyPath: m_Radius
+      value: 42.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3d9881c8181f444825487ea8f33857, type: 3}
@@ -1152,21 +1072,6 @@ PrefabInstance:
       propertyPath: printDebug
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8433358674387960385, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_Drag
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0.75
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3d9881c8181f444825487ea8f33857, type: 3}
 --- !u!1001 &2017294013
@@ -1255,21 +1160,6 @@ PrefabInstance:
         type: 3}
       propertyPath: printDebug
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8433358674387960385, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: DecisionPeriod
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_Drag
-      value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 9037310629848550771, guid: 8e3d9881c8181f444825487ea8f33857,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e3d9881c8181f444825487ea8f33857, type: 3}
