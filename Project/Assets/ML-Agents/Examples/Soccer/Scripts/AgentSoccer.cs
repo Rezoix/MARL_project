@@ -109,10 +109,10 @@ public class AgentSoccer : Agent
         
         // Mirror position observation along x axis for team
         var carPos = gameObject.transform.position - field.transform.position;
-        if (m_BehaviorParameters.TeamId != (int)Team.Blue)
+        /* if (m_BehaviorParameters.TeamId != (int)Team.Blue)
         {
             carPos.x = -carPos.x;
-        }
+        } */
         carPos.x = carPos.x / 52.0f;
         carPos.z = carPos.z / 22.0f;
         carPos.y = carPos.y / 10.0f;

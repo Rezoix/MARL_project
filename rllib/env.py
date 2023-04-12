@@ -258,14 +258,25 @@ class Env(MultiAgentEnv):
         # MultiDiscrete([3, 3]),
 
         # Policies (Unity: "behaviors") and agent-to-policy mapping fns.
-        policies = {
+        """ policies = {
             "Player": PolicySpec(
                 observation_space=obs_spaces,
                 action_space=action_spaces,
             )
+        } """
+
+        policies = {
+            "PurplePlayer": PolicySpec(
+                observation_space=obs_spaces,
+                action_space=action_spaces,
+            ),
+            "BluePlayer": PolicySpec(
+                observation_space=obs_spaces,
+                action_space=action_spaces,
+            ),
         }
 
         def policy_mapping_fn(agent_id, episode, worker, **kwargs):
-            return "Player"
+            return "PurplePlayer" if "1_" in agent_id else "BluePlayer"
 
         return policies, policy_mapping_fn

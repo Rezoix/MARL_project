@@ -27,6 +27,7 @@ import os
 import ray
 from ray import air, tune
 from ray.rllib.algorithms.ppo import PPOConfig
+from ray.rllib.algorithms.qmix import QMixConfig
 from ray.rllib.utils.test_utils import check_learning_achieved
 
 from env import Env
@@ -73,7 +74,7 @@ parser.add_argument(
 parser.add_argument(
     "--horizon",
     type=int,
-    default=3000,
+    default=500,
     help="The max. number of `step()`s for any episode (per agent) before "
     "it'll be reset again automatically.",
 )
@@ -115,16 +116,22 @@ if __name__ == "__main__":
             lambda_=0.95,
             gamma=0.99,
             sgd_minibatch_size=256,
-            train_batch_size=(args.horizon + 1) * args.num_workers
+            train_batch_size=(args.horizon + 1) * 16 * args.num_workers
             if args.file_name
-            else (args.horizon + 1),
+            else (args.horizon + 1) * 16,
             # (args.horizon + 1)* 16* args.num_workers,
             num_sgd_iter=20,
             clip_param=0.2,
             model={"fcnet_hiddens": [80, 80]},
         )
-        .multi_agent(policies=policies, policy_mapping_fn=policy_mapping_fn)
-        .resources(num_gpus=args.gpus)
+        .multi_agent(
+            policies=policies,
+            policy_mapping_fn=policy_mapping_fn,
+            count_steps_by="agent_steps",
+        )
+        .resources(
+            num_gpus=args.gpus,
+        )
     )
 
     stop = {
@@ -146,7 +153,11 @@ if __name__ == "__main__":
                     checkpoint_frequency=5,
                     checkpoint_at_end=True,
                 ),
-                callbacks=[SaveCheckpointCallback("Player", args.model_path)],
+                callbacks=[
+                    SaveCheckpointCallback(
+                        ["PurplePlayer", "BluePlayer"], args.model_path
+                    )
+                ],
             ),
         )
 

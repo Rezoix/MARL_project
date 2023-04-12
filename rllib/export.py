@@ -43,9 +43,9 @@ parser.add_argument(
 
 
 class SaveCheckpointCallback(Callback):
-    def __init__(self, agent_name, save_path) -> None:
+    def __init__(self, agent_names, save_path) -> None:
         super().__init__()
-        self.agent_name = agent_name
+        self.agent_names = agent_names
         self.save_path = save_path
 
     def on_checkpoint(self, iteration, trials, trial, checkpoint, **info):
@@ -53,14 +53,15 @@ class SaveCheckpointCallback(Callback):
         real_checkpoint = checkpoint.to_air_checkpoint()
         # mean_reward = checkpoint[1]['policy_reward_mean/TestAgentAudio']
         # # print(f"Checkpoint eval/mean: {mean_reward}")
-        model = Policy.from_checkpoint(real_checkpoint)[self.agent_name]
-        # fixed_model_path = save_path+f"/fixed_{mean_reward:.2f}.onnx"
-        # # fixed_model_path = save_path+f"/fixed_{iteration}.onnx"
-        fixed_model_path = self.save_path + f"/latest.onnx"
-        model.export_model(export_dir=self.save_path, onnx=12)
-        convert(self.save_path + "/model.onnx", fixed_model_path)
-        print(f"Exported best model to {self.save_path}")
-        print(f"Exported fixed model to {fixed_model_path}")
+        print(f"Exporting best models to {self.save_path}")
+        for agent_name in self.agent_names:
+            model = Policy.from_checkpoint(real_checkpoint)[agent_name]
+            # fixed_model_path = save_path+f"/fixed_{mean_reward:.2f}.onnx"
+            # # fixed_model_path = save_path+f"/fixed_{iteration}.onnx"
+            fixed_model_path = self.save_path + f"/latest_{agent_name}.onnx"
+            model.export_model(export_dir=self.save_path, onnx=12)
+            convert(self.save_path + "/model.onnx", fixed_model_path)
+            print(f"Exported fixed model to {fixed_model_path}")
 
 
 def convert(model_path, fixed_model_path):
